@@ -1,0 +1,32 @@
+.sort-by-asc {
+  left: 3px;
+  display: inline-block;
+  width: 0;
+  height: 0;
+  border: solid 5px transparent;
+  margin: 4px 4px 0 3px;
+  background: transparent;
+  border-bottom: solid 7px #f80;
+  border-top-width: 0;
+}
+
+.sort-by-desc {
+  left: 3px;
+  display: inline-block;
+  width: 0;
+  height: 0;
+  border: solid 5px transparent;
+  margin: 4px 4px 0 3px;
+  background: transparent;
+  border-top: solid 7px #f80;
+  border-bottom-width: 0;
+}
+
+th {
+  border: 1px solid gray;
+  // display: inline-flex;
+  // align-items: center;
+}
+td {
+  border: 1px solid #ddd;
+}
