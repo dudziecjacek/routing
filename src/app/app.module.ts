@@ -1,16 +1,24 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
 
-import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { NameEditorComponent } from './hero-form-reactive/name-editor.component';
+import { HeroFormReactiveValidationComponent } from './hero-form-reactive-validation/hero-form-reactive-validation.component';
+
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    NameEditorComponent,
+    HeroFormReactiveValidationComponent
+  ],
+  exports: [
+    NameEditorComponent
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

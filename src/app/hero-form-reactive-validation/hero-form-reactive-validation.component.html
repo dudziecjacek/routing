@@ -1,0 +1,71 @@
+<form [formGroup]="cardForm"
+      #formDir="ngForm">
+  <h2>Reactive form</h2>
+  <div [hidden]="formDir.submitted">
+    <div class="form-container">
+      <label for="cardNumber">Card Number</label>
+      <input type="number"
+             id="cardNumber"
+             formControlName="cardNumber">
+
+      <div *ngIf="cardNumber.invalid && cardNumber.touched">
+        <p class="invalid-text">Card Number is required</p>
+      </div>
+    </div>
+
+    <div class="form-container"
+         formGroupName="owner">
+      <div>
+        <label for="firstName">First Name</label>
+        <input type="text"
+               id="firstName"
+               formControlName="firstName">
+
+        <div *ngIf="firstName.invalid && firstName.touched">
+          <p class="invalid-text">First Name is required</p>
+        </div>
+      </div>
+
+      <div>
+        <label for="lastName">Last Name</label>
+        <input type="text"
+               name="lastName"
+               id="lastName"
+               formControlName="lastName">
+
+        <div *ngIf="lastName.invalid && lastName.touched">
+          <p class="invalid-text">Last Name is required</p>
+        </div>
+      </div>
+
+      <div>
+        <label for="height">Height</label>
+        <input type="number"
+               name="height"
+               id="height"
+               formControlName="height">
+
+        <div *ngIf="height.invalid && height.touched">
+          <p class="invalid-text">Height must be {{height.errors.min ? 'greater' : 'smaller' }}</p>
+        </div>
+        {{height.errors | json}}
+      </div>
+
+    </div>
+    <div>
+      <label for="isAgreed">Do you agree to the terms?</label>
+      <input type="checkbox"
+             name="isAgreed"
+             id="isAgreed"
+             formControlName="isAgreed">
+      <div *ngIf="isAgreed.invalid && isAgreed.touched">
+        <p class="invalid-text">Must be selected</p>
+      </div>
+      {{isAgreed.errors | json}}
+    </div>
+
+  </div>
+
+  <button type="submit">Submit</button>
+
+</form>
