@@ -1,7 +1,7 @@
 <form [formGroup]="cardForm"
       #formDir="ngForm"
-      (ngSubmit)="onSubmit()">
-  <h2>Reactive form</h2>
+      (ngSubmit)="onSubmit($event)">
+  <h2>Reactive form on submit</h2>
   <div [hidden]="formDir.submitted">
     <div class="form-container">
       <label for="cardNumber">Card Number</label>
@@ -67,8 +67,6 @@
 
   </div>
 
-  <button type="submit"
-          [disabled]="cardForm.invalid">Submit</button>
-  <button (click)="resetForm()">Reset</button>
+  <button type="submit">Submit</button>
 
 </form>

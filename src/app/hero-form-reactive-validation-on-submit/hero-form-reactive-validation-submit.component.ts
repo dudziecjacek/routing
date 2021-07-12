@@ -3,11 +3,11 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { FormBuilder } from '@angular/forms';
 
 @Component({
-  selector: 'app-hero-form-reactive-validation',
-  templateUrl: './hero-form-reactive-validation.component.html',
-  styleUrls: ['./hero-form-reactive-validation.component.scss']
+  selector: 'app-hero-form-reactive-validation-submit',
+  templateUrl: './hero-form-reactive-validation-submit.component.html',
+  styleUrls: ['./hero-form-reactive-validation-submit.component.scss']
 })
-export class HeroFormReactiveValidationComponent implements OnInit {
+export class HeroFormReactiveValidationComponentOnSubmitComponent implements OnInit {
   cardForm: FormGroup;
 
   // tslint:disable-next-line: max-line-length
@@ -63,13 +63,15 @@ export class HeroFormReactiveValidationComponent implements OnInit {
 
   get isAgreed() { return this.cardForm.get('isAgreed'); }
 
-  onSubmit(): void {
-    const result = Object.assign({}, this.cardForm.value);
-    result.owner = Object.assign({}, this.cardForm.value.owner);
-    console.log(result);
-  }
+  onSubmit(e): void {
+    e.preventDefault();
+    if (this.cardForm.valid) {
+      const result = Object.assign({}, this.cardForm.value);
+      result.owner = Object.assign({}, this.cardForm.value.owner);
+      console.log(result);
+    } else {
+      this.cardForm.markAllAsTouched();
+    }
 
-  resetForm(): void {
-    this.cardForm.reset();
   }
 }
