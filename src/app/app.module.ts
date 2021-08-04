@@ -4,12 +4,14 @@ import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { CustomerComponent } from './customers/customer.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { ChessComponent } from './chess/chess.component';
 
 @NgModule({
-  declarations: [
+  declarations: [	
     AppComponent,
-    CustomerComponent
-  ],
+    CustomerComponent,
+      ChessComponent
+   ],
   imports: [
     BrowserModule,
     ReactiveFormsModule

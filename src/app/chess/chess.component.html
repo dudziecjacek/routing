@@ -1,0 +1,60 @@
+<div class="card">
+  <div class="card-header">
+    Chess registration card
+  </div>
+  <div class="card-body"
+       [formGroup]="chessForm"
+       (ngSubmit)="save()"
+       #formDir="ngForm">
+    <label for="chessName"
+           [ngClass]="{invalid: isTouchedAndDirty(chessName)}">chess Name</label>
+    <input type="text"
+           class="form-control"
+           type="text"
+           placeholder="Chess Name"
+           formControlName="chessName"
+           id="chessName"
+           [ngClass]="{invalid: isTouchedAndDirty(chessName)}" />
+
+    <label for="email"
+           [ngClass]="{invalid: isTouchedAndDirty(email)}">Email</label>
+    <input type="text"
+           class="form-control"
+           formControlName="email"
+           id="email"
+           placeholder="email address"
+           [ngClass]="{invalid: isTouchedAndDirty(email)}" />
+    <div formGroupName="playerDetails">
+      <label for="level">Level</label>
+      <select formControlName="level"
+              id="level">
+        <option value="beginner">Beginner</option>
+        <option value="normal">Normal</option>
+        <option value="advanced">Advanced</option>
+      </select>
+      <br>
+      <label for="eloRating">Elo Rating</label>
+      <input type="number"
+             class="form-control"
+             formControlName="eloRating"
+             id="eloRating"
+             [ngClass]="{invalid: isTouchedAndDirty(level)}" />
+      <span>
+        <span *ngIf="chessForm.get('playerDetails').errors?.wrongElo">
+          This elo don't suit you
+        </span>
+      </span>
+    </div>
+  </div>
+
+
+  <button class="btn btn-primary mr-3"
+          type="submit"
+          [disabled]="chessForm.valid">Save</button>
+
+  <br>Dirty: {{ chessForm.dirty }}
+  <br>Touched: {{ chessForm.touched }}
+  <br>Valid: {{ chessForm.valid }}
+  <br>Value: {{ chessForm.value | json }}
+  <br>Value: {{ chessForm.get('playerDetails').errors | json }}
+</div>

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, FormBuilder, Validators, AbstractControl, ValidatorFn } from '@angular/forms';
+import { FormControl, FormGroup, FormBuilder, Validators, AbstractControl, ValidatorFn, FormArray } from '@angular/forms';
+import { debounceTime } from 'rxjs/operators';
 
 import { Customer } from './customer';
 
@@ -12,7 +13,7 @@ function ratingRange(c: AbstractControl) {
   return null;
 }
 
-// custom validator with params
+// custom validator with params (factory function in order to have more than one argument)
 function myValidator(min: number, max: number): ValidatorFn {
   return (c: AbstractControl) => {
     if (c.value !== null && (isNaN(c.value) || c.value < min || c.value > max)) {
@@ -23,6 +24,15 @@ function myValidator(min: number, max: number): ValidatorFn {
     }
     return null;
   };
+}
+
+function rating(min, max) {
+  return (c: AbstractControl) => {
+    if (c.value !== null && (isNaN(c.value) || c.value < min || c.value > max)) {
+      return { range: true }
+    }
+    return null;
+  }
 }
 
 //  compare if two emails are the same
@@ -49,6 +59,12 @@ function emailMatcher(c: AbstractControl): { [key: string]: boolean } | null {
 export class CustomerComponent implements OnInit {
   customerForm: FormGroup;
   customer = new Customer(); // data model sent to the backend
+  emailMessage: string;
+
+  private validationMessages = {
+    required: 'Please enter your email address',
+    email: 'Please enter a valid email address'
+  }
 
   constructor(private fb: FormBuilder) { }
 
@@ -72,10 +88,21 @@ export class CustomerComponent implements OnInit {
       availability: this.fb.group({
         start: ['', Validators.required],
         end: ['', Validators.required]
-      })
+      }),
+      addresses: this.fb.array([this.buildAddress()])
     });
 
-    this.populateTestData();
+    // this.populateTestData();
+    this.customerForm.get('notification').valueChanges.subscribe(
+      value => this.setNotification(value)
+    );
+
+    const emailControl = this.customerForm.get('emailGroup.email');
+    emailControl.valueChanges
+      .pipe(debounceTime(1000))
+      .subscribe(
+        value => this.setMessage(emailControl)
+      );
   }
 
   save(): void {
@@ -88,6 +115,30 @@ export class CustomerComponent implements OnInit {
 
   get lastName() {
     return this.customerForm.get('lastName');
+  }
+
+  get addresses(): FormArray {
+    return this.customerForm.get('addresses') as FormArray;
+  }
+
+  addAddress(): void {
+    this.addresses.push(this.buildAddress());
+  }
+
+  buildAddress(): FormGroup {
+    return this.fb.group({
+      addressType: 'home',
+      street1: '',
+      street2: '',
+      city: '',
+      state: '',
+      zip: ''
+    })
+  }
+
+  moar(): void {
+    const form = this.customerForm.get('addresses') as FormArray;
+    form.push(this.buildAddress());
   }
 
   populateTestData(): void {
@@ -107,5 +158,12 @@ export class CustomerComponent implements OnInit {
     phoneControl.updateValueAndValidity();
   }
 
+  setMessage(c: AbstractControl): void {
+    this.emailMessage = '';
+    if ((c.touched || c.dirty) && c.errors) {
+      this.emailMessage = Object.keys(c.errors).map(
+        key => this.validationMessages[key]).join(' ');
+    }
+  }
 
 }
