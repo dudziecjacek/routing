@@ -37,13 +37,13 @@ describe('HeroesComponent (shallow tests)', () => {
     mockHeroService.getHeroes.and.returnValue(of(HEROES));
     fixture.detectChanges();
 
-    expect(fixture.componentInstance.heroes.length).toBe(3);
+    expect(fixture.componentInstance.heroes.length).toEqual(3);
   });
 
   it('should create one li for each hero', () => {
     mockHeroService.getHeroes.and.returnValue(of(HEROES));
     fixture.detectChanges();
 
-    expect(fixture.debugElement.queryAll(By.css('li')).length).toBe(3);
+    expect(fixture.nativeElement.queryAll(By.css('li')).length).toBe(3);
   })
 });

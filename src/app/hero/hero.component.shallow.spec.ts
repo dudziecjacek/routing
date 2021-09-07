@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { HeroComponent } from './hero.component';
 
-describe('HeroComponent', () => {
+describe('HeroComponent (shallow tests)', () => {
   let fixture: ComponentFixture<HeroComponent>;
 
   beforeEach(() => {
@@ -22,8 +22,10 @@ describe('HeroComponent', () => {
     fixture.componentInstance.hero = { id: 1, name: 'SuperDude', strength: 3 };
     fixture.detectChanges();
 
+    // #1
     expect(fixture.debugElement.query(By.css('a')).nativeElement.textContent).toContain('SuperDude');
 
-    // expect(fixture.nativeElement.querySelector('a').textContent).toContain('SuperDude');
+    // #2
+    expect(fixture.nativeElement.querySelector('a').textContent).toContain('SuperDude');
   });
 });

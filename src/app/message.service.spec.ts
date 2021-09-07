@@ -1,23 +1,18 @@
 import { MessageService } from './message.service';
 describe('MessageService', () => {
-  let service: MessageService;
+  let messageService: MessageService;
 
   beforeEach(() => {
-    service = new MessageService();
+    messageService = new MessageService();
   });
 
-  it('should have no messages to start', () => {
-    expect(service.messages.length).toBe(0);
+  it('add should add', () => {
+    messageService.add('msg');
+    expect(messageService.messages.length).toBe(1);
   });
 
-  it('should add a message when add is called', () => {
-    service.add('message1');
-    expect(service.messages.length).toBe(1);
-  });
-
-  it('should remove all messages when clear is called', () => {
-    service.add('message1');
-    service.clear();
-    expect(service.messages.length).toBe(0);
+  it('clear method should remove all the messages from messages arr', () => {
+    messageService.clear();
+    expect(messageService.messages.length).toBe(0);
   });
 });
