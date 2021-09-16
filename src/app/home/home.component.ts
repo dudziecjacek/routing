@@ -1,35 +1,64 @@
-import {Component, OnInit} from '@angular/core';
-import {Course} from "../model/course";
-import {interval, noop, Observable, of, throwError, timer} from 'rxjs';
-import {catchError, delay, delayWhen, finalize, map, retryWhen, shareReplay, tap} from 'rxjs/operators';
-import {createHttpObservable} from '../common/util';
-import {Store} from '../common/store.service';
+import { Component, OnInit } from '@angular/core';
+import { Course } from '../model/course';
+import { fromEvent, interval, Observable, of, timer } from 'rxjs';
+import { catchError, delayWhen, map, retryWhen, shareReplay, tap, filter } from 'rxjs/operators';
 
 
 @Component({
-    selector: 'home',
-    templateUrl: './home.component.html',
-    styleUrls: ['./home.component.css']
+  selector: 'home',
+  templateUrl: './home.component.html',
+  styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
+  beginnersCourses$: Observable<Course[]>;
+  advancedCourses$: Observable<Course[]>;
 
-    beginnerCourses$: Observable<Course[]>;
+  constructor() {
 
-    advancedCourses$: Observable<Course[]>;
+  }
 
+  ngOnInit() {
 
-    constructor(private store:Store) {
+    const http$ = createHttpObservable('/api/courses');
 
-    }
+    const courses$ = http$
+      .pipe(
+        tap(() => console.log('request')),
+        map(res => Object.values<Course>(res['payload'])),
+        shareReplay()
+      );
 
-    ngOnInit() {
+    this.beginnersCourses$ = courses$
+      .pipe(
+        map((courses: Course[]) => courses.filter(course => course.category === 'BEGINNER'))
+      );
 
-        const courses$ = this.store.courses$;
+    this.advancedCourses$ = courses$
+      .pipe(
+        map((courses: Course[]) => courses.filter(course => course.category === 'ADVANCED'))
+      );
 
-        this.beginnerCourses$ = this.store.selectBeginnerCourses();
+    courses$.subscribe(
+      (resp) => console.log(resp),
+      (err) => console.log(err),
+      () => console.log()
+    );
+  }
 
-        this.advancedCourses$ = this.store.selectAdvancedCourses();
+}
 
-    }
-
+function createHttpObservable(url: string) {
+  return new Observable(observer => {
+    fetch(url)
+      .then(response => {
+        return response.json();
+      })
+      .then(body => {
+        observer.next(body);
+        observer.complete();
+      })
+      .catch(err => {
+        observer.error(err);
+      });
+  });
 }
