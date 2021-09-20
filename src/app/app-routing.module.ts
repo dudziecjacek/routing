@@ -1,11 +1,50 @@
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import { AboutComponent } from './about/about.component';
+import { LoginComponent } from './login/login.component';
+import { CoursesCardListComponent } from './courses/courses-card-list/courses-card-list.component';
+import { CourseComponent } from './courses/course/course.component';
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { Routes, RouterModule, PreloadAllModules, UrlSerializer } from '@angular/router';
 
 
-const routes: Routes = [];
+const routes: Routes = [
+  {
+    path: '',
+    redirectTo: '/courses',
+    pathMatch: 'full'
+  },
+  {
+    path: 'courses',
+    loadChildren: () => import('./courses/courses.module')
+      .then(m => m.CoursesModule),
+    data: {
+      preload: false
+    }
+  },
+  {
+    path: 'login',
+    component: LoginComponent
+  },
+  {
+    path: 'about',
+    component: AboutComponent
+  },
+  {
+    path: '**',
+    component: PageNotFoundComponent
+  }
+];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  imports: [
+    RouterModule.forRoot(routes)
+  ],
+  exports: [RouterModule],
+  providers: [
+
+  ]
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {
+
+
+}

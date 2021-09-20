@@ -1,10 +1,27 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {AuthStore} from './services/auth.store';
+
+
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.css']
 })
-export class AppComponent {
-  title = 'routing';
+export class AppComponent implements  OnInit {
+
+    constructor(public auth: AuthStore) {
+
+    }
+
+    ngOnInit() {
+
+
+    }
+
+  logout() {
+        this.auth.logout();
+
+  }
+
 }
