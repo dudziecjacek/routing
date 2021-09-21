@@ -1,3 +1,8 @@
+import { LessonDetailResolver } from './services/lesson-detail.resolver';
+import { LessonsResolver } from './services/lessons.resolver';
+import { LessonsListComponent } from './lessons-list/lessons-list.component';
+import { LessonDetailComponent } from './lesson/lesson-detail.component';
+import { CourseResolver } from './services/course.resolver';
 import { CourseComponent } from './course/course.component';
 import { HomeComponent } from './home/home.component';
 import { NgModule } from '@angular/core';
@@ -11,7 +16,26 @@ const routes: Routes = [
   },
   {
     path: ':courseUrl',
-    component: CourseComponent
+    component: CourseComponent,
+    children: [
+      {
+        path: '',
+        component: LessonsListComponent,
+        resolve: {
+          lessons: LessonsResolver
+        }
+      },
+      {
+        path: 'lessons/:lessonSeqNo',
+        component: LessonDetailComponent,
+        resolve: {
+          lesson: LessonDetailResolver
+        }
+      }
+    ],
+    resolve: {
+      course: CourseResolver
+    }
   }
 ];
 
@@ -21,7 +45,9 @@ const routes: Routes = [
   ],
   exports: [RouterModule],
   providers: [
-
+    CourseResolver,
+    LessonsResolver,
+    LessonDetailResolver
   ]
 })
 export class CoursesRoutingModule {
