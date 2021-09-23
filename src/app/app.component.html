@@ -6,6 +6,7 @@
         mat-button
         routerLink="/courses"
         routerLinkActive="menu-item-active"
+        [routerLinkActiveOptions]="{exact: true}"
       >
         <span>Courses</span>
       </a>
@@ -56,3 +57,4 @@
   <loading [detectRoutingOngoing]="true"></loading>
   <router-outlet></router-outlet>
 </mat-sidenav-container>
+<router-outlet name="chat"></router-outlet>

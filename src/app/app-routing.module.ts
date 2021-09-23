@@ -1,3 +1,4 @@
+import { ChatComponent } from './chat/chat.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { AboutComponent } from './about/about.component';
 import { LoginComponent } from './login/login.component';
@@ -29,6 +30,11 @@ const routes: Routes = [
     path: 'about',
     component: AboutComponent
   },
+{
+  path: 'helpdesk-chat',
+  component: ChatComponent,
+  outlet: 'chat'
+},
   {
     path: '**',
     component: PageNotFoundComponent
