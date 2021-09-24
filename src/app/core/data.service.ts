@@ -1,12 +1,14 @@
+import { CACHEABLE } from './cache.interceptor';
 import { OldBook } from 'app/models/oldBook';
 import { Injectable } from '@angular/core';
 import { allBooks, allReaders } from 'app/data';
 import { Reader } from 'app/models/reader';
 import { Book } from 'app/models/book';
 import { BookTrackerError } from 'app/models/bookTrackerError';
-import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders, HttpContext } from '@angular/common/http';
 import { map, tap, catchError } from 'rxjs/operators';
 import { Observable, throwError } from 'rxjs';
+import { CONTENT_TYPE } from './add-header.interceptor';
 
 @Injectable({
   providedIn: 'root'
@@ -29,12 +31,14 @@ export class DataService {
     return this.http.get<Reader>(`/api/readers/${id}`);
   }
 
-  getAllBooks(): Observable<Book[] | BookTrackerError> {
-    return this.http.get<Book[]>('/api/books')
-      .pipe(
-        catchError(err => this.handleHttpError(err))
-      );
-  }
+getAllBooks(): Observable<Book[] | BookTrackerError> {
+  return this.http.get<Book[]>('/api/books', {
+    context: new HttpContext().set(CACHEABLE, false)
+  })
+    .pipe(
+      catchError(err => this.handleHttpError(err))
+    );
+}
 
   private handleHttpError(error: HttpErrorResponse): Observable<BookTrackerError> {
     const dataError = new BookTrackerError();

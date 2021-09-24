@@ -1,4 +1,6 @@
-import { HttpClientModule } from '@angular/common/http';
+import { LogResponseInterceptor } from './core/log-response.interceptor';
+import { AddHeaderInterceptor } from './core/add-header.interceptor';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { ErrorHandler, NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -10,6 +12,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { EditBookComponent } from './edit-book/edit-book.component';
 import { EditReaderComponent } from './edit-reader/edit-reader.component';
 import { BookTrackerErrorHandlerService } from './core/book-tracker-error-handler.service';
+import { CacheInterceptor } from './core/cache.interceptor';
 
 @NgModule({
   declarations: [
@@ -21,7 +24,10 @@ import { BookTrackerErrorHandlerService } from './core/book-tracker-error-handle
     AddReaderComponent
   ],
   providers: [
-    { provide: ErrorHandler, useClass: BookTrackerErrorHandlerService }
+    { provide: ErrorHandler, useClass: BookTrackerErrorHandlerService },
+    {provide: HTTP_INTERCEPTORS, useClass: AddHeaderInterceptor, multi: true}, // multi: true - multiple interceptors
+    {provide: HTTP_INTERCEPTORS, useClass: LogResponseInterceptor, multi: true},
+    {provide: HTTP_INTERCEPTORS, useClass: CacheInterceptor, multi: true}
   ],
   imports: [
     BrowserModule,
