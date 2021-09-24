@@ -17,16 +17,21 @@ export class EditReaderComponent implements OnInit {
   currentBadge: string;
 
   constructor(private route: ActivatedRoute,
-              private dataService: DataService,
-              private badgeService: BadgeService) { }
+    private dataService: DataService,
+    private badgeService: BadgeService) { }
 
-  ngOnInit() {
-    let readerID: number = parseInt(this.route.snapshot.params['id']);
-    this.selectedReader = this.dataService.getReaderById(readerID);
+  ngOnInit(): void {
+    const readerID: number = parseInt(this.route.snapshot.params['id']);
+    this.dataService.getReaderById(readerID).subscribe(
+      data => this.selectedReader = data,
+      err => console.log(err)
+    );
     this.currentBadge = this.badgeService.getReaderBadge(this.selectedReader.totalMinutesRead);
   }
 
-  saveChanges() {
-    console.warn('Save reader not yet implemented.');
+  saveChanges(): void {
+    this.dataService.updateReader(this.selectedReader).subscribe(
+      (data: void) => console.log(this.selectedReader.name, 'updated')
+    );
   }
 }
