@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 
 import { AuthService } from './auth.service';
+import * as UserActions from '../user/user.actions';
 
 @Component({
   templateUrl: './login.component.html',
@@ -32,7 +33,7 @@ export class LoginComponent implements OnInit {
 
   checkChanged(): void {
     this.store.dispatch(
-      { type: '[Product] Toggle username masking' }
+      UserActions.maskUserName()
     );
   }
 
