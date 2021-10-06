@@ -1,5 +1,6 @@
 import { DataService } from './../core/data.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Version, VERSION } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 
 import { Book } from 'app/models/book';
 import { Reader } from 'app/models/reader';
@@ -17,7 +18,7 @@ export class DashboardComponent implements OnInit {
   allReaders: Reader[];
   mostPopularBook: Book;
 
-  constructor(private loggerService: LoggerService, private dataService: DataService) { }
+  constructor(private loggerService: LoggerService, private dataService: DataService, private title: Title) { }
 
   ngOnInit() {
     this.allBooks = this.dataService.getAllBooks();
@@ -31,6 +32,8 @@ export class DashboardComponent implements OnInit {
 
     this.getAuthorRecommendationAsync(1)
       .catch(err => this.loggerService.error(err));
+
+    this.title.setTitle(`Book Tracker ${VERSION.full}`);
 
     this.loggerService.log('Done with dashboard initialization.');
   }

@@ -1,5 +1,6 @@
+import { BookTrackerErrorHandlerService } from './core/book-tracker-error-handler.service';
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { ErrorHandler, NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http'
 
@@ -26,7 +27,9 @@ import { EditReaderComponent } from './edit-reader/edit-reader.component';
     FormsModule,
     HttpClientModule
   ],
-  providers: [],
+  providers: [
+    { provide: ErrorHandler, useClass: BookTrackerErrorHandlerService }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
