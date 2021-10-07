@@ -1,3 +1,4 @@
+import { AuthService } from './../auth.service';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatchPassword } from '../validators/match-password';
@@ -37,8 +38,27 @@ export class SignupComponent implements OnInit {
 
   constructor(
     private matchPassword: MatchPassword,
-    private uniqueUsername: UniqueUsername
-  ) {}
+    private uniqueUsername: UniqueUsername,
+    private authService: AuthService
+  ) { }
 
-  ngOnInit() {}
+  ngOnInit() { }
+
+  onSubmit() {
+    if (this.authForm.invalid) {
+      return;
+    }
+    this.authService.signup(this.authForm.value).subscribe({
+      next: (response) => {
+
+      },
+      error: (err) => {
+        if (!err.status) { // because status: 0 when no internet
+          this.authForm.setErrors({ noConnection: true });
+        } else {
+          this.authForm.setErrors({ unknownError: true });
+        }
+      }
+    });
+  }
 }
